@@ -73,6 +73,7 @@ public class CoinScript : MonoBehaviour
         float terrainHeight = Terrain.activeTerrain.SampleHeight(newPosition);
         newPosition.y = terrainHeight + Random.Range(2f, 20f);
         this.transform.position = newPosition;
+        GameState.coin++;
 		animator.SetInteger("AnimState", 0);
 	}
 }

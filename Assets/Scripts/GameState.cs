@@ -4,7 +4,18 @@ using System.Collections.Generic;
 
 public class GameState
 {
-    private static bool _isBurst;
+    private static int _coin = 0;
+	public static int coin
+	{
+		get => _coin;
+		set
+		{
+			_coin = value;
+			Notify(nameof(coin));
+		}
+	}
+
+	private static bool _isBurst;
     public static bool isBurst 
     { 
         get => _isBurst; 
