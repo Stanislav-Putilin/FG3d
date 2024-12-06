@@ -21,17 +21,22 @@ public class CameraScript : MonoBehaviour
 	}   
     void Update()
     {
+		
+	}
+
+	private void LateUpdate()
+	{
 		Vector2 lookValue = lookAction.ReadValue<Vector2>();
 
-		angH += lookValue.x * 0.05f;
+		angH += lookValue.x * 3f * Time.deltaTime;
 
-		angV -= lookValue.y * 0.05f;
+		angV -= lookValue.y * 3f * Time.deltaTime;
 
-		angV = Mathf.Clamp(angV, -30.0f,30.0f);
+		angV = Mathf.Clamp(angV, -30.0f, 30.0f);
 
-		this.transform.eulerAngles = new Vector3(angV, angH,  0.0f);
+		this.transform.eulerAngles = new Vector3(angV, angH, 0.0f);
 
-		this.transform.position = character.transform.position + 
-		  Quaternion.Euler(angV - angV0, angH - angH0,  0.0f) * s;
+		this.transform.position = character.transform.position +
+		  Quaternion.Euler(angV - angV0, angH - angH0, 0.0f) * s;
 	}
 }

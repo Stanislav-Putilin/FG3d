@@ -7,12 +7,17 @@ public class CoinScript : MonoBehaviour
     private float minDistance = 50f;  // мін. відстань від попереднього положення
     private Animator animator;
     private Collider[] colliders;
+    private AudioSource catchSound;
+
+    private bool isExitTrigger = false;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         colliders = GetComponents<Collider>();
-    }
+		catchSound = GetComponent<AudioSource>();
+
+	}
 
     void Update()
     {
@@ -23,20 +28,32 @@ public class CoinScript : MonoBehaviour
     {
         if(other.name == "Character")
         {
-            ReplaceCoin();
-
-			//if (colliders[0].bounds.Intersects(other.bounds))
-   //         {
-   //             animator.SetBool("IsCollected", true);
-   //         }
-   //         else
-   //         {
-   //             Debug.Log("Closer");
-   //         }
+            if (colliders[0].bounds.Intersects(other.bounds))
+            {
+				isExitTrigger = false;
+				animator.SetInteger("AnimState", 2);				
+				catchSound.Play();
+			}
+            else
+            {
+				isExitTrigger = true;
+				animator.SetInteger("AnimState", 1);				
+            }
         }
     }
 
-    public void ReplaceCoin()
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.name == "Character")
+		{
+            if(isExitTrigger)
+            {
+				animator.SetInteger("AnimState", 0);
+			}			
+		}
+	}
+
+	public void ReplaceCoin()
     {
         Vector3 newPosition;
         do
@@ -56,9 +73,10 @@ public class CoinScript : MonoBehaviour
         float terrainHeight = Terrain.activeTerrain.SampleHeight(newPosition);
         newPosition.y = terrainHeight + Random.Range(2f, 20f);
         this.transform.position = newPosition;
-        //animator.SetBool("IsCollected", false);
-    }
+		animator.SetInteger("AnimState", 0);
+	}
 }
+
 /* Д.З. Створити анімацію (кліп) пульсації монети
  * Реалізувати переходи між усіма станами аніматора 
  * (не між кожною парою доцільні переходи).
