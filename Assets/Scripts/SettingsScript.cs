@@ -13,14 +13,19 @@ public class SettingsScript : MonoBehaviour
 	[SerializeField]
 	private Slider ambientVolumeSlider;
 
+	[SerializeField]
+	private Slider musicVolumeSlider;
+
 	private GameObject content;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
 		content = transform.Find("Content").gameObject;
         Time.timeScale = content.activeInHierarchy ? 0.0f : 1.0f;
-        OnEffectsSlider(effectsVolumeSlider.value);
+        
+		OnEffectsSlider(effectsVolumeSlider.value);
         OnAmbientSlider(ambientVolumeSlider.value);
+		OnMusicSlider(musicVolumeSlider.value);
 	}
 
     // Update is called once per frame
@@ -30,7 +35,6 @@ public class SettingsScript : MonoBehaviour
         {
 			Time.timeScale = content.activeInHierarchy ? 1.0f : 0.0f;
 			content.SetActive(!content.activeInHierarchy);
-
         }
     }
 
@@ -48,6 +52,15 @@ public class SettingsScript : MonoBehaviour
 		float dB = Mathf.Lerp(-80.0f, 10.0f, value);
 
 		audioMixer.SetFloat("AmbientVolume", dB);
+
+		Debug.Log(value);
+	}
+
+	public void OnMusicSlider(float value)
+	{
+		float dB = Mathf.Lerp(-80.0f, 10.0f, value);
+
+		audioMixer.SetFloat("MusicVolume", dB);
 
 		Debug.Log(value);
 	}
